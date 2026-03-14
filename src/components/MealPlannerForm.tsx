@@ -161,9 +161,9 @@ export function MealPlannerForm() {
                 </div>
                 <ul className="mt-3 space-y-2 text-sm">
                   {day.meals.map((meal) => (
-                    <li key={meal.id} className="flex items-center justify-between">
+                    <li key={`${day.day}-${meal.id}`} className="flex items-center justify-between">
                       <span className="text-slate-600">
-                        {meal.slot}: {meal.name}
+                        {meal.slotLabel}: {meal.name}
                       </span>
                       <span className="text-slate-400">{meal.calories} ккал</span>
                     </li>
@@ -172,8 +172,31 @@ export function MealPlannerForm() {
               </div>
             ))}
 
+            <div className="rounded-2xl border border-slate-100 p-4 text-sm">
+              <p className="font-semibold text-slate-900">Список покупок</p>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                {plan.grocery_list.slice(0, 2).map((group) => (
+                  <div key={group.category} className="rounded-xl border border-dashed border-slate-200 p-3">
+                    <p className="text-xs font-semibold uppercase text-slate-500">
+                      {group.category}
+                    </p>
+                    <ul className="mt-2 space-y-1 text-xs text-slate-600">
+                      {group.items.slice(0, 3).map((item) => (
+                        <li key={`${group.category}-${item.name}`}>
+                          {item.name}: {Math.round(item.amount)} {item.unit}
+                        </li>
+                      ))}
+                      {group.items.length > 3 && (
+                        <li className="text-slate-400">+ ще {group.items.length - 3}</li>
+                      )}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className="rounded-2xl border border-dashed border-emerald-200 bg-emerald-50/70 p-4 text-sm text-emerald-800">
-              Збережено в Supabase (`meal_plans`). У grocery list {plan.grocery_list.length} позицій.
+              Збережено в Supabase (`meal_plans`). Категорій у grocery list: {plan.grocery_list.length}.
             </div>
           </div>
         )}
