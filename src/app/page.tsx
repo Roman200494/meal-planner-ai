@@ -1,4 +1,5 @@
 import { MealPlannerForm } from "@/components/MealPlannerForm";
+import { MealGallery } from "@/components/MealGallery";
 
 const steps = [
   {
@@ -106,6 +107,10 @@ export default function Home() {
             Наступний крок — підключити справжню базу рецептів, обробити фідбек тестерів та додати інтеграції з доставкою продуктів.
           </div>
         </div>
+      </section>
+
+      <section className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
+        <MealGallery />
       </section>
     </main>
   );
