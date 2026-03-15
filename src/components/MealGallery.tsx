@@ -1,29 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
-import type { MealCard } from "@/data/meal-catalog";
 import { mealCatalog } from "@/data/meal-catalog";
 
 const DAY_TOTAL = 7;
 const MEALS_PER_DAY = 3;
 
-export function MealGallery() {
-  const [selected, setSelected] = useState<Set<string>>(new Set());
+type MealGalleryProps = {
+  selected: Set<string>;
+  onToggle: (mealId: string) => void;
+};
 
-  const totalSelected = useMemo(() => selected.size, [selected]);
-
-  const toggleMeal = (meal: MealCard) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(meal.id)) {
-        next.delete(meal.id);
-      } else {
-        next.add(meal.id);
-      }
-      return next;
-    });
-  };
+export function MealGallery({ selected, onToggle }: MealGalleryProps) {
+  const totalSelected = selected.size;
 
   return (
     <div className="space-y-4">
@@ -86,7 +75,7 @@ export function MealGallery() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => toggleMeal(meal)}
+                  onClick={() => onToggle(meal.id)}
                   className={`mt-2 w-full rounded-2xl border px-4 py-2 text-sm font-semibold transition ${
                     isSelected
                       ? "border-emerald-600 bg-emerald-50 text-emerald-700"
