@@ -2,7 +2,7 @@ import { generateMealPlan } from "@/app/actions/generate-plan";
 
 async function main() {
   const result = await generateMealPlan({
-    email: "smoke@test",
+    
     calories: 2000,
     days: 3,
     includeSnack: true,
