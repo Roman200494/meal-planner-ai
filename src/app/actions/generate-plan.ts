@@ -5,15 +5,13 @@ import {
   generatePlanData,
   type DayPlan,
   type GroceryCategory,
+  type MealSlot,
 } from "@/lib/meal-generator";
 
 export type PlanRequest = {
-  email?: string;
-  calories: number;
-  days: number;
-  includeSnack: boolean;
-  mealsPerDay: number;
-  focus: string;
+  people: number;
+  meals: MealSlot[];
+  exclusions: string[];
 };
 
 export type GeneratedMealPlan = {
@@ -24,31 +22,37 @@ export type GeneratedMealPlan = {
   created_at: string;
 };
 
+const DAYS_IN_PLAN = 7;
+const FALLBACK_MEALS: MealSlot[] = ["breakfast", "lunch", "dinner"];
+
 export async function generateMealPlan(payload: PlanRequest) {
-  const safePayload: PlanRequest = {
-    email: payload.email?.trim() || undefined,
-    calories: Number(payload.calories) || 1800,
-    days: Math.min(Math.max(payload.days, 3), 7),
-    includeSnack: payload.includeSnack,
-    mealsPerDay: payload.mealsPerDay,
-    focus: payload.focus?.trim() || "",
+  const safePayload = {
+    people: Math.max(1, Math.min(Number(payload.people) || 1, 6)),
+    meals: (payload.meals?.length ? payload.meals : FALLBACK_MEALS).filter(
+      (slot, index, self) => self.indexOf(slot) === index
+    ),
+    exclusions: Array.isArray(payload.exclusions) ? payload.exclusions : [],
   };
 
   const { plan, groceryList } = generatePlanData({
-    days: safePayload.days,
-    includeSnack: safePayload.includeSnack,
-    targetCalories: safePayload.calories,
+    days: DAYS_IN_PLAN,
+    mealSlots: safePayload.meals,
+    exclusions: safePayload.exclusions,
+    people: safePayload.people,
   });
 
   const { data, error } = await supabaseAdmin
     .from("meal_plans")
     .insert({
-      profile_email: safePayload.email,
-      target_calories: safePayload.calories,
-      days: safePayload.days,
+      profile_email: null,
+      target_calories: safePayload.people * 600,
+      days: DAYS_IN_PLAN,
       meals: plan,
       grocery_list: groceryList,
-      notes: safePayload.focus,
+      notes: JSON.stringify({
+        exclusions: safePayload.exclusions,
+        meals: safePayload.meals,
+      }),
     })
     .select("id, target_calories, meals, grocery_list, created_at")
     .single();

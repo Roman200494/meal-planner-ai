@@ -16,10 +16,10 @@ export function MealPlannerWorkspace() {
   const summary = useMemo(() => {
     return planMeals.reduce(
       (acc, meal) => {
-        if (meal.mealType === "breakfast") acc.breakfast += 1;
-        if (meal.mealType === "lunch") acc.lunch += 1;
-        if (meal.mealType === "dinner") acc.dinner += 1;
-        if (meal.mealType === "snack") acc.snack += 1;
+        if (meal.mealType === "сніданок") acc.breakfast += 1;
+        if (meal.mealType === "обід") acc.lunch += 1;
+        if (meal.mealType === "вечеря") acc.dinner += 1;
+        if (meal.mealType === "перекус") acc.snack += 1;
         return acc;
       },
       { breakfast: 0, lunch: 0, dinner: 0, snack: 0 }

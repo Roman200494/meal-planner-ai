@@ -57,8 +57,8 @@ export function MealGallery({ selected, onToggle }: MealGalleryProps) {
                   <h3 className="text-lg font-semibold text-slate-900">
                     {meal.name}
                   </h3>
-                  <span className="text-xs uppercase text-slate-400">
-                    {meal.mealType}
+                  <span className="text-xs font-semibold text-slate-500">
+                    {meal.mealType.charAt(0).toUpperCase() + meal.mealType.slice(1)}
                   </span>
                 </div>
                 <p className="text-sm text-slate-500">{meal.description}</p>

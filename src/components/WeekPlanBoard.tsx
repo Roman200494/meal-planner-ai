@@ -17,10 +17,10 @@ type Props = {
 };
 
 export function WeekPlanBoard({ selection }: Props) {
-  const breakfasts = selection.filter((meal) => meal.mealType === "breakfast");
-  const lunches = selection.filter((meal) => meal.mealType === "lunch");
-  const dinners = selection.filter((meal) => meal.mealType === "dinner");
-  const snacks = selection.filter((meal) => meal.mealType === "snack");
+  const breakfasts = selection.filter((meal) => meal.mealType === "сніданок");
+  const lunches = selection.filter((meal) => meal.mealType === "обід");
+  const dinners = selection.filter((meal) => meal.mealType === "вечеря");
+  const snacks = selection.filter((meal) => meal.mealType === "перекус");
 
   const fallback = (list: MealCard[], index: number) =>
     list.length ? list[index % list.length] : selection[index % selection.length];
